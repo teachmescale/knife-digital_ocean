@@ -59,6 +59,11 @@ class Chef
         :description => 'Comma spearated list of your SSH key ids',
         :proc        => lambda { |o| o.split(/[\s,]+/) }
 
+      option :private_networking,
+        :long        => "--private_networking",
+        :description => "Eenables a private network interface if the region supports private networking",
+        :default     => false
+
       option :identity_file,
         :short       => '-i IDENTITY_FILE',
         :long        => '--identity-file IDENTITY_FILE',
@@ -161,11 +166,12 @@ class Chef
           exit 1
         end
 
-        response = client.droplets.create(:name        => locate_config_value(:server_name),
-                                          :size_id     => locate_config_value(:size),
-                                          :image_id    => locate_config_value(:image),
-                                          :region_id   => locate_config_value(:location),
-                                          :ssh_key_ids => locate_config_value(:ssh_key_ids).join(','))
+        response = client.droplets.create(:name               => locate_config_value(:server_name),
+                                          :size_id            => locate_config_value(:size),
+                                          :image_id           => locate_config_value(:image),
+                                          :region_id          => locate_config_value(:location),
+                                          :ssh_key_ids        => locate_config_value(:ssh_key_ids).join(','),
+                                          :private_networking => locate_config_value(:private_networking))
 
         if response.status != 'OK'
           ui.error("Droplet could not be started #{response.inspect}")
