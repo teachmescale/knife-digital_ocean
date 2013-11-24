@@ -74,7 +74,7 @@ describe Chef::Knife::DigitalOceanDropletCreate do
       end
 
       it 'should call #run on the bootstrap class' do
-        Chef::Knife::Bootstrap.any_instance.stub(:run)
+        allow_any_instance_of(Chef::Knife::Bootstrap).to receive(:run)
         expect { subject.run }.not_to raise_error
       end
     end
@@ -97,8 +97,8 @@ describe Chef::Knife::DigitalOceanDropletCreate do
       let(:subject) {
         s = super()
         s.client.stub_chain(:droplets, :create).and_return mock_api_response(api_response)
-        s.stub(:ip_address_available).and_return '123.123.123.123'
-        s.stub(:tcp_test_ssh).and_return true
+        allow(s).to receive(:ip_address_available).and_return '123.123.123.123'
+        allow(s).to receive(:tcp_test_ssh).and_return true
         s
       }
 
@@ -107,8 +107,8 @@ describe Chef::Knife::DigitalOceanDropletCreate do
       end
 
       it 'should call #run on the bootstrap class' do
-        Chef::Knife::SoloBootstrap.any_instance.should_receive(:run)
-        Chef::Knife::Bootstrap.any_instance.should_not_receive(:run)
+        expect_any_instance_of(Chef::Knife::SoloBootstrap).to receive(:run)
+        expect_any_instance_of(Chef::Knife::Bootstrap).not_to receive(:run)
         expect { subject.run }.to_not raise_error
       end
     end
@@ -120,7 +120,7 @@ describe Chef::Knife::DigitalOceanDropletCreate do
       end
 
       it 'should not create a droplet' do
-        subject.client.should_not_receive(:droplets)
+        expect(subject.client).not_to receive(:droplets)
         expect { subject.run }.to raise_error
       end
     end
@@ -136,13 +136,13 @@ describe Chef::Knife::DigitalOceanDropletCreate do
       let(:subject) {
         s = super()
         s.client.stub_chain(:droplets, :create).and_return mock_api_response(api_response)
-        s.stub(:ip_address_available).and_return '123.123.123.123'
-        s.stub(:tcp_test_ssh).and_return true
+        allow(s).to receive(:ip_address_available).and_return '123.123.123.123'
+        allow(s).to receive(:tcp_test_ssh).and_return true
         s
       }
 
       it 'should call #bootstrap_for_node' do
-        subject.should_not_receive(:bootstrap_for_node)
+        expect(subject).not_to receive(:bootstrap_for_node)
         expect { subject.run }.to raise_error
       end
 
