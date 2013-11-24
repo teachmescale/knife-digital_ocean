@@ -96,7 +96,7 @@ describe Chef::Knife::DigitalOceanDropletCreate do
 
       let(:subject) {
         s = super()
-        s.client.stub_chain(:droplets, :create).and_return mock_api_response(api_response)
+        allow(s.client).to receive_message_chain(:droplets, :create).and_return mock_api_response(api_response)
         allow(s).to receive(:ip_address_available).and_return '123.123.123.123'
         allow(s).to receive(:tcp_test_ssh).and_return true
         s
@@ -135,7 +135,7 @@ describe Chef::Knife::DigitalOceanDropletCreate do
     describe 'should not do any bootstrapping' do
       let(:subject) {
         s = super()
-        s.client.stub_chain(:droplets, :create).and_return mock_api_response(api_response)
+        allow(s.client).to receive_message_chain(:droplets, :create).and_return mock_api_response(api_response)
         allow(s).to receive(:ip_address_available).and_return '123.123.123.123'
         allow(s).to receive(:tcp_test_ssh).and_return true
         s
