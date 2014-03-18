@@ -76,6 +76,7 @@ __Example__
                                       --ssh-keys 1234,1235 \
                                       --bootstrap \
                                       --run-list "role[base],role[webserver]"
+                                      --private_networking
 ```
 
 __Syntax__
@@ -88,6 +89,7 @@ __Syntax__
                                       --ssh-keys <SSH KEY-ID(s), comma-separated> \
                                       --bootstrap \
                                       --run-list "<RUNLIST>"
+                                      --private_networking (optional)
 ```
 
 __Short Syntax__
